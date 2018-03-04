@@ -53,22 +53,17 @@ class ConprBank implements Bank {
 
     @Override
     public String createAccount(String owner) {
-        final ConprAccount a = new ConprAccount(owner);
-        accounts.put(a.getNumber(), a);
-        return a.getNumber();
+        synchronized (this) {
+            final ConprAccount a = new ConprAccount(owner, accounts.size() + 1);
+            accounts.put(a.getNumber(), a);
+            return a.getNumber();
+        }
     }
 
     @Override
     public boolean closeAccount(String number) {
         final ConprAccount a = accounts.get(number);
-        if (a != null) {
-            if (a.getBalance() != 0 || !a.isActive()) {
-                return false;
-            }
-            a.passivate();
-            return true;
-        }
-        return false;
+        return a != null && a.passivate();
     }
 
     @Override
@@ -79,27 +74,46 @@ class ConprBank implements Bank {
     @Override
     public void transfer(bank.Account from, bank.Account to, double amount)
             throws IOException, InactiveException, OverdrawException {
-        from.withdraw(amount);
-        to.deposit(amount);
+
+        Account lowerAccountNumber = from;
+        Account higherAccountNumber = to;
+
+        if (lowerAccountNumber.getNumber().compareTo(higherAccountNumber.getNumber()) > 0) {
+            Account tmpAccountNumber = higherAccountNumber;
+            higherAccountNumber = lowerAccountNumber;
+            lowerAccountNumber = tmpAccountNumber;
+        }
+
+        synchronized (lowerAccountNumber) {
+            synchronized (higherAccountNumber) {
+                if (from.isActive() && to.isActive()) {
+                    from.withdraw(amount);
+                    to.deposit(amount);
+                } else {
+                    throw new InactiveException("");
+                }
+            }
+        }
     }
 }
 
 class ConprAccount implements bank.Account {
-    private static int id = 0;
 
     private String number;
     private String owner;
     private double balance;
     private boolean active = true;
 
-    ConprAccount(String owner) {
+    ConprAccount(String owner, int number) {
         this.owner = owner;
-        this.number = "CONPR_ACC_" + id++;
+        this.number = "CONPR_ACC_" + number;
     }
 
     @Override
     public double getBalance() {
-        return balance;
+        synchronized (this) {
+            return balance;
+        }
     }
 
     @Override
@@ -117,28 +131,39 @@ class ConprAccount implements bank.Account {
         return active;
     }
 
-    void passivate() {
-        active = false;
+    boolean passivate() {
+        synchronized (this) {
+            if (balance != 0 || !active) {
+                return false;
+            } else {
+                active = false;
+                return true;
+            }
+        }
     }
 
     @Override
     public void deposit(double amount) throws InactiveException {
-        if (!active)
-            throw new InactiveException("account not active");
-        if (amount < 0)
-            throw new IllegalArgumentException("negative amount");
-        balance += amount;
+        synchronized (this) {
+            if (!active)
+                throw new InactiveException("account not active");
+            if (amount < 0)
+                throw new IllegalArgumentException("negative amount");
+            balance += amount;
+        }
     }
 
     @Override
     public void withdraw(double amount) throws InactiveException, OverdrawException {
-        if (!active)
-            throw new InactiveException("account not active");
-        if (amount < 0)
-            throw new IllegalArgumentException("negative amount");
-        if (balance - amount < 0)
-            throw new OverdrawException("account cannot be overdrawn");
-        balance -= amount;
+        synchronized (this) {
+            if (!active)
+                throw new InactiveException("account not active");
+            if (amount < 0)
+                throw new IllegalArgumentException("negative amount");
+            if (balance - amount < 0)
+                throw new OverdrawException("account cannot be overdrawn");
+            balance -= amount;
+        }
     }
 
 }
