@@ -12,11 +12,18 @@ public final class Semaphore {
 		return value;
 	}
 
-	public void acquire() {
-
+	public synchronized void acquire() {
+		while (value == 0) {
+            try {
+                wait();
+            } catch (InterruptedException e) { }
+        }
+        value--;
+        notifyAll();
 	}
 
-	public void release() {
-
+	public synchronized void release() {
+        value++;
+        notifyAll();
 	}
 }
