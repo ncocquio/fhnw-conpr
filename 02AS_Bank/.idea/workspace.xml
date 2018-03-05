@@ -1,39 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0fac56c0-5351-41a9-a0b6-6cbb333de996" name="Default" comment="assessment 2">
-      <change beforePath="" afterPath="$PROJECT_DIR$/../.gitignore" />
+    <list default="true" id="0fac56c0-5351-41a9-a0b6-6cbb333de996" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/Account.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/Bank.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/BankDriver.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/BankDriver2$UpdateHandler.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/BankDriver2.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/ClientFX.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/InactiveException.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/OverdrawException.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/gui/BankGuiFX$1.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/gui/BankGuiFX$StringDoubleConverter.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/gui/BankGuiFX.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/gui/tests/BankTest.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/gui/tests/ConcurrentReads$1.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/gui/tests/ConcurrentReads$2.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/gui/tests/ConcurrentReads.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/gui/tests/EfficiencyTest.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/gui/tests/EfficiencyTestCONPR.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/gui/tests/FunctionalityTest.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/gui/tests/ThreadingTest$1.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/gui/tests/ThreadingTest$1TestThread.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/gui/tests/ThreadingTest$1TestThread2.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/gui/tests/ThreadingTest.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/gui/tests/TransferTest.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/gui/tests/WarmUp.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/local/ConprAccount.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/local/ConprBank.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/local/ConprBankDriver.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/bank/local/ConprBankLauncher.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/local/ConprBankDriver.java" afterPath="$PROJECT_DIR$/src/main/java/bank/local/ConprBankDriver.java" />
-      <change beforePath="$PROJECT_DIR$/../02LE_Locks/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../02LE_Locks/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -390,7 +359,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20146728" sideWeight="0.50136423" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20146728" sideWeight="0.49863574" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3295711" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295711" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11903138" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
