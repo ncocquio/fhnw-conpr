@@ -13,13 +13,14 @@ public class JMM2 {
 		}
 	}
 
-	private static volatile Person p = null;
+	private static Person p = null;
 
 	public static void main(String[] args) {
 		new Thread("T1") {
 			public void run() {
-				p = new Person();
-				p.setName("Meier");
+                Person tmp = new Person();
+                tmp.setName("Meier");
+                p = tmp;
 		  }
 		}.start();
 

@@ -2,7 +2,7 @@ package ch.fhnw.conpr.jmm.test;
 
 public class JMM1 {
 	private static int value = 0;
-	private static volatile boolean ready = false;
+	private static boolean ready = false;
 
 	public static void main(String[] args) {
 		new Thread("T1") {

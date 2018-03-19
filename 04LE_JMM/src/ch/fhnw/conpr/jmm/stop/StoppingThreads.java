@@ -17,9 +17,9 @@ public class StoppingThreads {
 		public void run() {
 			while (isRunning()) {
 				doSomeWork();
-				// System.out.println("isRunning() = " + isRunning());
+				//System.out.println("w.isRunning() = " + isRunning());
 			}
-			// System.out.println("isRunning() = " + isRunning());
+			//System.out.println("r.isRunning() = " + isRunning());
 		}
 
 		private void doSomeWork() {
