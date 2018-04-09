@@ -42,13 +42,13 @@ class ConprBank implements Bank {
 
     @Override
     public Set<String> getAccountNumbers() {
-        Set<String> activeAccountNumbers = new HashSet<>();
+        Map<String, ConprAccount> activeAccountNumbers = new ConcurrentHashMap<>();
         for (ConprAccount acc : accounts.values()) {
             if (acc.isActive()) {
-                activeAccountNumbers.add(acc.getNumber());
+                activeAccountNumbers.put(acc.getNumber(), acc);
             }
         }
-        return activeAccountNumbers;
+        return activeAccountNumbers.keySet();
     }
 
     @Override
@@ -99,10 +99,10 @@ class ConprBank implements Bank {
 
 class ConprAccount implements bank.Account {
 
-    private String number;
-    private String owner;
-    private double balance;
-    private boolean active = true;
+    private final String number;
+    private final String owner;
+    private volatile double balance;
+    private volatile boolean active = true;
 
     ConprAccount(String owner, int number) {
         this.owner = owner;
@@ -111,9 +111,7 @@ class ConprAccount implements bank.Account {
 
     @Override
     public double getBalance() {
-        synchronized (this) {
-            return balance;
-        }
+        return balance;
     }
 
     @Override
