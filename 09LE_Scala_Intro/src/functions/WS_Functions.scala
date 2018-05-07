@@ -1,6 +1,6 @@
 package functions
 
-import java.util.concurrent.atomic.AtomicReference
+import java.util.concurrent.atomic.{AtomicInteger, AtomicReference}
 
 object Einleitung {
   def call(): Unit = println(":-)")
@@ -20,8 +20,22 @@ object Einleitung {
 
 object Aufgabe1 {
 
-  def clock = ???
-  def everySecond(action: (Int) => Unit): Unit = ???
+  def clock(i: Int): Unit = {
+    println("Tick(" + i + ")")
+  }
+
+  def everySecond(action: (Int) => Unit): Unit = {
+    new Thread() {
+      override def run(): Unit = {
+        var i = 0
+        while (true) {
+          action(i)
+          i = i + 1
+          Thread.sleep(1000)
+        }
+      }
+    }.start()
+  }
 
   def main(args: Array[String]) {
 
@@ -32,13 +46,24 @@ object Aufgabe1 {
       println("Tock()")
       println("Tick(" + i + ")")
     })
+
+    everySecond(clock)
   }
 }
 
 object Aufgabe2 {
-  def time(block: () => Unit): Unit = ???
+  def time(block: () => Unit): Unit = {
+    val starttime = System.currentTimeMillis();
+    block()
+    println("[" + (System.currentTimeMillis() - starttime) + " ms]")
+  }
 
-  def time[A](block: () => A): A = ???
+  def time[A](block: () => A): A = {
+    val starttime = System.currentTimeMillis();
+    val A = block()
+    println("[" + (System.currentTimeMillis() - starttime) + " ms]")
+    A
+  }
 
   def main(args: Array[String]): Unit = {
     time(() => {
@@ -50,13 +75,13 @@ object Aufgabe2 {
       "Done"
     })
 
+    println(a)
+
   }
 }
 
 object Aufgabe3 {
-  class NiceAtomicInt(init: Int) {
-    ???
-  }
+  class NiceAtomicInt(init: Int)
 
   def main(args: Array[String]): Unit = {
     val balance = new NiceAtomicInt(0)
