@@ -10,6 +10,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,7 +36,7 @@ public class ConCrawler {
     private static String HTML_TEMPLATE = 
             "<html>\n" +
             "  <body>\n" +
-            "    <h1>ConCrawler</h1>\n" +
+            "    <h1>ConCrawler 2.0</h1>\n" +
             "      <form action='' method='get'>\n" +
             "        <input type='text' name='q' size='60'/>\n" +
             "        <input type='submit' value='Crawl'/>\n" +
@@ -54,11 +58,23 @@ public class ConCrawler {
     /** Starts the request handler loop. */
     public void start() throws IOException {
         System.out.println("ConCrawler started: http://localhost:" + PORT );
-        
+
+        AtomicInteger ai = new AtomicInteger(0);
+        Executor ex = Executors.newFixedThreadPool(10, r -> {
+            Thread thread = new Thread(r);
+            thread.setName("ConnectionHandler #" + ai.incrementAndGet());
+            return thread;
+        });
         try (ServerSocket serverSocket = new ServerSocket(PORT)){
             while (true) {
                 final Socket connection = serverSocket.accept();
-                handleRequest(connection);
+                ex.execute(() -> {
+                    try {
+                        handleRequest(connection, Thread.currentThread().getName());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
             } 
         } 
     }
@@ -66,7 +82,7 @@ public class ConCrawler {
 
     /** Handles a single request. 
      * @throws IOException */
-    public void handleRequest(Socket connection) throws IOException {
+    public void handleRequest(Socket connection, String name) throws IOException {
         
         try(BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()))) {
@@ -82,7 +98,7 @@ public class ConCrawler {
                 final long startTime = System.currentTimeMillis();
                 final List<String> urls = crawler.crawl(query);
                 final long duration = System.currentTimeMillis() - startTime;
-                response = formatResult(query, urls, duration);
+                response = formatResult(query, urls, duration, name);
             } else {
                response = HEADER_404;
             }
@@ -104,7 +120,7 @@ public class ConCrawler {
     }
 
     /** Returns an OK HTTP header accompanied by the result html content. */
-    private String formatResult(String query,  List<String> urls, long duration) {
+    private String formatResult(String query, List<String> urls, long duration, String name) {
         final String resultTitle = "<h2>URLs reachable from: "+ query + "</h2>\n";
         
         String resultList = "<ol>";
@@ -113,7 +129,7 @@ public class ConCrawler {
         }
         resultList += "</ol>\n";
         
-        final String processingTime = "Processing time: " + duration + "ms";
+        final String processingTime = "Processing time: " + duration + "ms / Handled by: " + name;
 
         final String body = HTML_TEMPLATE.replace(RESULT_PLACEHOLDER, resultTitle + resultList + processingTime);
         return HEADER_OK + body;
