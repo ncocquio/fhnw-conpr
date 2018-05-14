@@ -3,9 +3,6 @@ package ws.collections
 import SyncEvento._
 import ws.common.Student
 import ws.common.GradedStudent
-import ws.common.GradedStudent
-import ws.common.GradedStudent
-import ws.common.GradedStudent
 
 object SyncEventoClient {
 
@@ -17,13 +14,12 @@ object SyncEventoClient {
     students.foreach(student => println(s"[${System.currentTimeMillis() - startTime} ms] ${student.email}"))
     
     // a)
-    val gradedStudents = ???
-    
-    // b)
-    val talents = ???
+    val gradedStudents = students.map(s => GradedStudent(s, estimateGrade(s)))
+
+    val talents = gradedStudents.filter(gs => gs.grade >= 5)
     
     // c)
-    ???
+    printTopTen(talents)
   }
   
   /* Gibt die Top 10 Studierenden aus */
