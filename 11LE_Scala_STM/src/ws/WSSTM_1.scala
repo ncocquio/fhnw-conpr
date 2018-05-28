@@ -50,13 +50,23 @@ object _1_UnsafeTest extends App {
  */
 class AtomicAccount {
 
-  private val balance = ???
+  private val balance = Ref[Double](0)
 
-  def deposit(amount: Double): Unit = ???
+  def deposit(amount: Double): Unit = {
+    atomic{ implicit tx => {
+      balance += amount
+    }}
+  }
   
-  def withdraw(amount: Double): Unit = ???
+  def withdraw(amount: Double): Unit = {
+    atomic{ implicit tx => {
+      balance -= amount
+    }}
+  }
 
-  def getBalance(): Double = ???
+  def getBalance(): Double = {
+    return balance.single.get
+  }
 }
 
 /* Aufgaben: 
