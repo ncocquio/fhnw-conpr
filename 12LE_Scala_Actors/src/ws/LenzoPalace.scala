@@ -30,7 +30,7 @@ import scala.concurrent.duration.Duration
  *
  * @see http://www.lenzo-palace.ch/
  *
- * Lösung: Siehe ganz unten
+  * Lösung: Siehe ganz unten
  */
 object LenzoPalace {
   // Getränke

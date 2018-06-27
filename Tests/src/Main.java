@@ -209,3 +209,68 @@ public class Sum extends RecursiveTask<Integer> {
     }
 }
 
+public class InvokeAllExample {
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
+
+        Callable<String> task1 = () -> {
+            Thread.sleep(2000);
+            return "Result of Task1";
+        };
+
+        Callable<String> task2 = () -> {
+            Thread.sleep(1000);
+            return "Result of Task2";
+        };
+
+        Callable<String> task3 = () -> {
+            Thread.sleep(5000);
+            return "Result of Task3";
+        };
+
+        List<Callable<String>> taskList = Arrays.asList(task1, task2, task3);
+
+        List<Future<String>> futures = executorService.invokeAll(taskList);
+
+        for (Future<String> future : futures) {
+            // The result is printed only after all the
+            // futures are complete. (i.e. after 5 seconds)
+            System.out.println(future.get());
+        }
+
+        executorService.shutdown();
+    }
+}
+
+
+public class Renderer {
+    private final ExecutorService executor;
+
+    Renderer(ExecutorService executor) {
+        this.executor = executor;
+    }
+
+    void renderPage(CharSequence source) {
+        List<ImageInfo> info = scanForImageInfo(source);
+        CompletionService<ImageData> completionService =
+                new ExecutorCompletionService<ImageData>(executor);
+        for (final ImageInfo imageInfo : info)
+            completionService.submit(new Callable<ImageData>() {
+                public ImageData call() {
+                    return imageInfo.downloadImage();
+                }
+            });
+        renderText(source);
+        try {
+            for (int t = 0, n = info.size(); t < n; t++) {
+                Future<ImageData> f = completionService.take();
+                ImageData imageData = f.get();
+                renderImage(imageData);
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e) {
+            throw launderThrowable(e.getCause());
+        }
+    }
+}
