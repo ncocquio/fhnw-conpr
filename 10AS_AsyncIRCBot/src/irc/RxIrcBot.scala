@@ -1,25 +1,20 @@
 package irc
 
-import java.net.ServerSocket
+import java.io.{BufferedReader, InputStreamReader, OutputStreamWriter}
 import java.net.Socket
-import rx.lang.scala.Observable
-import java.io.OutputStreamWriter
-import java.io.InputStream
-import java.io.InputStreamReader
-import rx.lang.scala.Subscriber
-import java.io.BufferedReader
-import java.io.IOException
-import scala.annotation.tailrec
+
 import rx.lang.scala.observables.ConnectableObservable
 import rx.lang.scala.schedulers.IOScheduler
+import rx.lang.scala.{Observable, Subscriber}
+
 import scala.io.StdIn
 
 object RxIrcBot {
   val host = "chat.freenode.org"
   val port = 6667
-  val chan = "#conpr_fhnw"
-  val nick = "conpr_fhnw_bot"
-  val real = "conpr_fhnw_real"
+  val chan = "#conpr_4iab"
+  val nick = "spasti_2"
+  val real = "spasti_2"
   // set to 'true' to see received and transmitted messages 
   val logMessages = true
 
@@ -56,16 +51,24 @@ class RxIrcBot(out: OutputStreamWriter, in: ConnectableObservable[String]) {
     sendCmd("USER", s"$nick 0 * : $real")
     sendCmd("JOIN", chan)
 
+    sendMsg("Challo")
+
     // Log all messages
     if (logMessages) in.subscribe(cmd => println("< " + cmd), exc => println(exc))
     
     // Play PING -> PONG (keep alive)
-    
-
-    
+    in.filter(isPing).subscribe(cmd => sendPong(cmd))
 
     // Handle messages
-    
+    in.filter(isPrivMsg).subscribe(
+      msg => {
+        val nick = senderNick(msg)
+        senderMsg(msg) match {
+          case "BANG" => sendMsg("💥💥💥💥")
+          case s: String => sendMsg(s"Shut up " + nick)
+        }
+      }
+    )
 
     // Connect multiple Observers to one HOT Observable. This is to ensure that all Observers 
     // get the events from the same single Observable reading from the InputStream.

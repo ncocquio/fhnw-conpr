@@ -40,7 +40,12 @@ object STMBank extends Bank {
     numberToAccount().filter(_._2.isActive()).map(_._1).toSet.asJava
   }
   
-  def transfer(from: Account, to: Account, amount: Double): Unit = ???
+  def transfer(from: Account, to: Account, amount: Double): Unit = {
+    atomic { implicit tx =>
+      from.withdraw(amount)
+      to.deposit(amount)
+    }
+  }
 }
 
 
@@ -58,6 +63,18 @@ class STMAccount(number: String, owner: String) extends Account {
   
   def getBalance(): Double = balance.single.get /* Single operation transaction. */
  
-  def deposit(amount: Double) = ???
-  def withdraw(amount: Double) = ???
+  def deposit(amount: Double) = {
+    if (amount <= 0) { throw IllegalArgumentException }
+    if (!isActive()) { throw IllegalAccessError }
+    atomic { implicit tx =>
+      balance.set(balance() + amount)
+    }
+  }
+  def withdraw(amount: Double) = {
+    if (balance() - amount < 0) { throw IllegalArgumentException }
+    if (!isActive()) { throw IllegalAccessError }
+    atomic { implicit tx =>
+      balance.set(balance() - amount)
+    }
+  }
 }
